@@ -1,8 +1,11 @@
 package org.example.Game;
 
 import org.example.Display.Display;
+import org.example.Graphics.TextureAtlas;
 import org.example.IO.Input;
 import org.example.Utils.Time;
+
+import java.awt.*;
 
 public class Game implements Runnable {
 
@@ -17,15 +20,20 @@ public class Game implements Runnable {
     public static final float UPDATE_INTERVAL = Time.SECOND / UPDATE_RATE;
     public static final long IDLE_TIME = 1;
 
+    public static final String ATLAS_FILE_NAME = "texture_atlas_tank.png";
+
     private boolean running;
     public Thread gameThread;
+    private Graphics2D graphics;
     private Input input;
+    private TextureAtlas atlas;
 
     public Game() {
         running = false;
         Display.create(WIDTH, HEIGHT, TITLE, CLEAR_COLOR, NUM_BUFFERS);
         input = new Input();
         Display.addInputListener(input);
+        atlas = new TextureAtlas(ATLAS_FILE_NAME);
     }
 
     public synchronized void Start() {
@@ -53,6 +61,7 @@ public class Game implements Runnable {
 
     private void Render() {
         Display.clear();
+        //graphics.drawImage(atlas.cut(0,0,32,32),300,300,null);
         Display.swapBuffers();
     }
 
