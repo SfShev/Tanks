@@ -1,6 +1,7 @@
 package org.example.Game;
 
 import org.example.Display.Display;
+import org.example.IO.Input;
 import org.example.Utils.Time;
 
 public class Game implements Runnable {
@@ -18,10 +19,13 @@ public class Game implements Runnable {
 
     private boolean running;
     public Thread gameThread;
+    private Input input;
 
     public Game() {
         running = false;
         Display.create(WIDTH, HEIGHT, TITLE, CLEAR_COLOR, NUM_BUFFERS);
+        input = new Input();
+        Display.addInputListener(input);
     }
 
     public synchronized void Start() {
