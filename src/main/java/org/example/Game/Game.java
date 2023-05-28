@@ -1,11 +1,14 @@
 package org.example.Game;
 
 import org.example.Display.Display;
+import org.example.Graphics.Sprite;
+import org.example.Graphics.SpriteSheet;
 import org.example.Graphics.TextureAtlas;
 import org.example.IO.Input;
 import org.example.Utils.Time;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
 
 public class Game implements Runnable {
 
@@ -27,6 +30,8 @@ public class Game implements Runnable {
     private Graphics2D graphics;
     private Input input;
     private TextureAtlas atlas;
+    private SpriteSheet sheet;
+    private Sprite sprite;
 
     public Game() {
         running = false;
@@ -34,6 +39,8 @@ public class Game implements Runnable {
         input = new Input();
         Display.addInputListener(input);
         atlas = new TextureAtlas(ATLAS_FILE_NAME);
+        sheet = new SpriteSheet(atlas.cut(8 * 16,5*16,16*2,16),2,16);
+        sprite = new Sprite(sheet,1);
     }
 
     public synchronized void Start() {
@@ -57,11 +64,25 @@ public class Game implements Runnable {
 
     private void Update() {
 
+        if (input.getKey(KeyEvent.VK_UP)){
+            //y -= speed;
+        }
+        if (input.getKey(KeyEvent.VK_DOWN)){
+            //y += speed;
+        }
+        if (input.getKey(KeyEvent.VK_LEFT)){
+            //x -= speed;
+        }
+        if (input.getKey(KeyEvent.VK_RIGHT)){
+            //x += speed;
+        }
+
+
     }
 
     private void Render() {
         Display.clear();
-        //graphics.drawImage(atlas.cut(0,0,32,32),300,300,null);
+        //sprite.render(graphics,x,y);
         Display.swapBuffers();
     }
 
