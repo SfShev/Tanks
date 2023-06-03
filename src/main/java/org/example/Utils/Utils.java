@@ -12,4 +12,11 @@ public class Utils {
         return newImage;
     }
 
+    public static int [] [] levelParser(String filePath){
+
+
+
+        return null;
+    }
+
 }

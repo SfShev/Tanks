@@ -1,6 +1,7 @@
 package org.example.Game;
 
 import org.example.Display.Display;
+import org.example.Game.Level.Level;
 import org.example.Graphics.TextureAtlas;
 import org.example.IO.Input;
 import org.example.Utils.Time;
@@ -29,6 +30,7 @@ public class Game implements Runnable {
     private Input input;
     private TextureAtlas atlas;
     private Player player;
+    private Level lvl;
 
 
     public Game() {
@@ -39,6 +41,7 @@ public class Game implements Runnable {
         Display.addInputListener(input);
         atlas = new TextureAtlas(ATLAS_FILE_NAME);
         player = new Player(300,300,2,3,atlas);
+        lvl = new Level(atlas);
 
     }
 
@@ -63,10 +66,12 @@ public class Game implements Runnable {
 
     private void Update() {
         player.update(input);
+        lvl.update();
     }
 
     private void Render() {
         Display.clear();
+        lvl.render(graphics);
         player.render(graphics);
         Display.swapBuffers();
     }
