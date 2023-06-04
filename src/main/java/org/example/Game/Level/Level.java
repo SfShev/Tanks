@@ -2,9 +2,12 @@ package org.example.Game.Level;
 
 import org.example.Game.Game;
 import org.example.Graphics.TextureAtlas;
+import org.example.Utils.Utils;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Level {
@@ -15,13 +18,12 @@ public class Level {
     public static final int TILES_IN_WIDTH = Game.WIDTH / SCALED_TILE_SIZE;
     public static final int TILES_IN_HEIGHT = Game.HEIGHT / SCALED_TILE_SIZE;
     private Map<TileType, Tile> tiles;
-
-
-    private int[][] tileMap;
+    private List<Point> grassCords;
+    private Integer[][] tileMap;
 
 
     public Level(TextureAtlas atlas) {
-        tileMap = new int[TILES_IN_WIDTH][TILES_IN_HEIGHT];
+        tileMap = new Integer[TILES_IN_WIDTH][TILES_IN_HEIGHT];
         tiles = new HashMap<TileType, Tile>();
         tiles.put(TileType.BRICK, new Tile(atlas.cut(32 * TILE_SCALE, 0 * TILE_SCALE, TILE_SCALE, TILE_SCALE), TILE_IN_GAME_SCALE, TileType.BRICK));
         tiles.put(TileType.METAL, new Tile(atlas.cut(32 * TILE_SCALE, 2 * TILE_SCALE, TILE_SCALE, TILE_SCALE), TILE_IN_GAME_SCALE, TileType.METAL));
@@ -31,9 +33,15 @@ public class Level {
         tiles.put(TileType.EMPTY, new Tile(atlas.cut(36 * TILE_SCALE, 6 * TILE_SCALE, TILE_SCALE, TILE_SCALE), TILE_IN_GAME_SCALE, TileType.EMPTY));
 
 
-
-
-
+        tileMap = Utils.levelParser("res/Level.lvl");
+        grassCords = new ArrayList<Point>();
+        for (int i = 0; i < tileMap.length; i++) {
+            for (int j = 0; j < tileMap[i].length; j++) {
+                Tile tile = tiles.get(TileType.fromNumeric(tileMap[i][j]));
+                if (tile.type() == TileType.GRASS)
+                    grassCords.add(new Point(j * SCALED_TILE_SIZE, i * SCALED_TILE_SIZE));
+            }
+        }
     }
 
     public void update() {
@@ -43,10 +51,17 @@ public class Level {
 
         for (int i = 0; i < tileMap.length; i++) {
             for (int j = 0; j < tileMap[i].length; j++) {
-                tiles.get(TileType.fromNumeric(tileMap[i][j])).render(g, j * SCALED_TILE_SIZE, i * SCALED_TILE_SIZE);
+                Tile tile = tiles.get(TileType.fromNumeric(tileMap[i][j]));
+                if (tile.type() != TileType.GRASS)
+                    tile.render(g, j * SCALED_TILE_SIZE, i * SCALED_TILE_SIZE);
             }
         }
+    }
+    public void renderGrass(Graphics2D g) {
 
+        for (Point p : grassCords){
+            tiles.get(TileType.GRASS).render(g, p.x, p.y);
+        }
     }
 
 }
